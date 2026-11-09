@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вас заметили...</title>
+    <style>
+        /* Сброс и базовые настройки */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        /* Контейнер экрана */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            max-height: 800px;
+            background-color: #b30000;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        /* --- ЛЕВАЯ ЧАСТЬ (Текст) --- */
+        .left-content {
+            position: absolute;
+            top: 10%;
+            left: 20px;
+            width: 60%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .terminal-text {
+            font-size: 13px;
+            line-height: 1.1;
+            color: #fff;
+            white-space: pre-wrap;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            animation-delay: 0.5s;
+        }
+
+        .warning-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+            margin-top: 10px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+            animation-delay: 2.5s;
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+        }
+
+        /* --- СИЛУЭТ ЧЕЛОВЕКА С КОСОЙ (Только CSS) --- */
+        .reaper-container {
+            position: absolute;
+            bottom: 5%;
+            left: 15px;
+            width: 180px;
+            height: 350px;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            animation-delay: 1.2s;
+            /* Поворот для динамики */
+            transform: rotate(-5deg);
+        }
+
+        /* Тело и капюшон */
+        .reaper-body {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            width: 100px;
+            height: 200px;
+            background-color: #fff;
+            /* Форма капюшона и мантии */
+            clip-path: polygon(20% 0%, 80% 0%, 100% 30%, 90% 100%, 10% 100%, 0% 30%);
+            border-radius: 50% 50% 10% 10% / 20% 20% 10% 10%;
+        }
+
+        /* Внутренняя тень капюшона (создает лицо) */
+        .reaper-body::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 60px;
+            background-color: #b30000; /* Цвет фона, чтобы проделать дыру */
+            border-radius: 50%;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+        }
+
+        /* Коса (Древко) */
+        .scythe-shaft {
+            position: absolute;
+            bottom: 20px;
+            left: 100px;
+            width: 6px;
+            height: 320px;
+            background-color: #fff;
+            transform: rotate(20deg);
+            transform-origin: bottom;
+            border-radius: 3px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* Коса (Лезвие) */
+        .scythe-blade {
+            position: absolute;
+            top: -20px;
+            left: -70px;
+            width: 80px;
+            height: 30px;
+            background-color: #fff;
+            /* Форма изогнутого лезвия */
+            clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 20% 50%, 0% 0%);
+            border-radius: 0 0 50% 50%;
+            transform: rotate(-15deg);
+        }
+
+        /* --- ПРАВАЯ ЧАСТЬ (ASCII и Треугольник) --- */
+        .right-content {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            z-index: 10;
+        }
+
+        .ascii-arrow {
+            font-size: 14px;
+            line-height: 0.85;
+            color: #fff;
+            white-space: pre;
+            text-align: right;
+            margin-right: -10px;
+            display: inline-block;
+            overflow: hidden;
+            width: 0;
+            opacity: 0;
+            animation: typeArrow 1.5s steps(30, end) forwards;
+            animation-delay: 3s;
+        }
+
+        .play-triangle {
+            width: 0;
+            height: 0;
+            border-top: 35px solid transparent;
+            border-bottom: 35px solid transparent;
+            border-left: 50px solid rgba(255, 255, 255, 0.7);
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+            animation-delay: 4s;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.4));
+        }
+
+        /* --- АНИМАЦИИ --- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes typeArrow {
+            0% { width: 0; opacity: 1; }
+            100% { width: 100%; opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="video-container">
+    
+    <!-- ЛЕВАЯ ЧАСТЬ: Текст -->
+    <div class="left-content">
+        <div class="terminal-text">
+phone: iphone 11
+locker phone
+1
+1
+1
+2
+2
+2
+3
+3
+3
+        </div>
+        <div class="warning-text">у вас сутки</div>
+    </div>
+
+    <!-- СИЛУЭТ ЧЕЛОВЕКА С КОСОЙ (Собран из CSS) -->
+    <div class="reaper-container">
+        <!-- Древко косы -->
+        <div class="scythe-shaft">
+            <!-- Лезвие косы -->
+            <div class="scythe-blade"></div>
+        </div>
+        <!-- Тело в капюшоне -->
+        <div class="reaper-body"></div>
+    </div>
+
+    <!-- ПРАВАЯ ЧАСТЬ: ASCII и Кнопка Play -->
+    <div class="right-content">
+        <div class="ascii-arrow">ooo\
+ooooooo\
+oooooooooooo
+ooooooooooo\
+DOooooooooo
+DOoooooo
+DODOOOO
+DODOO
+DOO
+O</div>
+        <div class="play-triangle"></div>
+    </div>
+
+</div>
+
+</body>
+  </html>
